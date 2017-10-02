@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+
+import HeroesList from "../Heroes/HeroesList";
+import HeroForm from "../Heroes/HeroForm";
 import "./App.css";
 
 const HEROES = [
@@ -58,30 +61,18 @@ class App extends Component {
   };
 
   render() {
-    const heroesList = this.state.heroes.map(hero => (
-      <li key={hero.id} onClick={() => this.handleSelectedHero(hero)}>
-        <span className="badge">{hero.id}</span> {hero.name}
-      </li>
-    ));
     return (
-      <div className="App">
+      <div>
         <h1>Git Heroes</h1>
-        <ul className="heroes">{heroesList}</ul>
-        <div>
-          <div>
-            <label>ID: </label>
-            {this.state.selectedHero.id}
-          </div>
-          <form onSubmit={this.handleHeroSubmit}>
-            <label>Hero Name: </label>
-            <input
-              type="text"
-              value={this.state.selectedHero.name}
-              onChange={e => this.handleInputChange(e)}
-            />
-            <input className="button" type="submit" value="submit" />
-          </form>
-        </div>
+        <HeroesList
+          heroes={this.state.heroes}
+          handleSelectedHero={this.handleSelectedHero}
+        />
+        <HeroForm
+          selectedHero={this.state.selectedHero}
+          heroSubmit={this.handleHeroSubmit}
+          inputChange={this.handleInputChange}
+        />
       </div>
     );
   }
