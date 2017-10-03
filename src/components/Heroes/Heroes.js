@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import HeroesList from "../Heroes/HeroesList";
-import HeroForm from "../Heroes/HeroForm";
-import "./Heroes.css";
+import { connect } from "react-redux";
 
-import { getHeroes } from "../../heroes.service";
+import HeroesList from "../Heroes/HeroesList";
+import "./Heroes.css";
 
 class Heroes extends Component {
   //state. stuff our component wants to know about
   state = {
-    heroes: [], //property of state. an array of heroes
     selectedHero: {
       name: "",
       id: undefined //haven't picked one yet!!! so do it already!
@@ -17,13 +15,7 @@ class Heroes extends Component {
   };
 
   //life cycle hooks. do stuff when init
-  componentWillMount() {
-    getHeroes.then(payload => {
-      this.setState({
-        heroes: payload
-      });
-    });
-  }
+  componentWillMount() {}
 
   //takes selected hero and updates selectedHero Property
   handleSelectedHero = hero => {
@@ -39,7 +31,7 @@ class Heroes extends Component {
       <div>
         <h1>Git Heroes</h1>
         <HeroesList
-          heroes={this.state.heroes}
+          heroes={this.props.heroes}
           handleSelectedHero={this.handleSelectedHero}
         />
         {this.state.selectedHero.id && (
@@ -55,4 +47,8 @@ class Heroes extends Component {
   }
 }
 
-export default Heroes;
+const mapStatetoProps = state => ({
+  heroes: state.heroes
+});
+
+export default connect(mapStatetoProps)(Heroes);

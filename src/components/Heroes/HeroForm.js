@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { saveHero } from "../../actions/actions";
 
 import { getHeroById } from "../../heroes.service";
 
@@ -6,19 +9,12 @@ class HeroForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      heroid: parseInt(props.match.params.heroid),
-      hero: undefined
+      hero: this.props.hero
     };
   }
 
   //Lifecycle method
-  componentWillMount() {
-    getHeroById(this.state.heroid).then(hero => {
-      this.setState({
-        hero: hero
-      });
-    });
-  }
+  componentWillMount() {}
 
   //takes event from form input and updates selectedHero name
   handleInputChange = event => {
@@ -32,6 +28,8 @@ class HeroForm extends Component {
 
   //handle submit update heroes array for state
   handleHeroSubmit = event => {
+    const hero = this.state.hero;
+    this.props.onSave(hero.id, hero.name);
     this.props.history.goBack();
     event.preventDefault();
   };
@@ -61,4 +59,16 @@ class HeroForm extends Component {
   }
 }
 
-export default HeroForm;
+const mapStatetoProps = (state, props) => {
+  const heroid = parseInt(props.match.params.heroid);
+  return {
+    hero: state.heroes.find(hero => hero.id === heroid)
+  };
+};
+
+//we need to connect our dispatch to this component
+const mapDispatchToProps = dispatch => ({
+  onSave: bindActionCreators(saveHero, dispatch)
+});
+
+export default connect(mapStatetoProps, mapDispatchToProps)(HeroForm);
