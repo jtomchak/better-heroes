@@ -5,3 +5,10 @@ export const saveHero = (id, name) => ({
   id,
   name
 });
+
+export const addHero = hero => ({
+  type: types.ADD_HERO,
+  hero: {
+    ...hero
+  }
+});

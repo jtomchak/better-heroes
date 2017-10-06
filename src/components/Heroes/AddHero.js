@@ -1,5 +1,8 @@
 import React, { Component } from "react";
-// import { ADD_HERO } from "../../ActionTypes";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
+import { addHero } from "../../actions/actions";
+
 import * as types from "../../ActionTypes";
 
 class AddHero extends Component {
@@ -39,6 +42,11 @@ class AddHero extends Component {
     this.refs.userInput.value = "";
   };
 
+  handleAddHero = event => {
+    this.props.addHero(this.state.hero);
+    this.props.history.push("/heroes");
+  };
+
   render() {
     const hero = this.state.hero;
     return (
@@ -51,7 +59,13 @@ class AddHero extends Component {
         {hero.name && (
           <div>
             <label>Name: {hero.name}</label>
-            <button onClick={() => console.log("ADD ME")}>Add hero</button>
+            <br />
+            <label>Bio: {hero.bio}</label>
+            <br />
+            <label>Email: {hero.email}</label>
+            <br />
+            <br />
+            <button onClick={this.handleAddHero}>Add hero</button>
           </div>
         )}
         {this.state.error && (
@@ -66,4 +80,8 @@ class AddHero extends Component {
   }
 }
 
-export default AddHero;
+const mapDispatchToProps = dispatch => ({
+  addHero: bindActionCreators(addHero, dispatch)
+});
+
+export default connect(null, mapDispatchToProps)(AddHero);
